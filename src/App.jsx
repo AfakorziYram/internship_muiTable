@@ -1,31 +1,53 @@
-import Table_mui from "./Table_mui"
+
+
+import MainTable from "./MainTable";
+import SideTable from "./SideTable";
+import { Box } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { FetchData } from "./http";
+import TableError from "./TableError";
 
 
 
 
 
 const App = () => {
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ['data'],
+    queryFn: FetchData
+  });
+
+  const handleRetry = () => {
+    refetch();
+  };
+
   return (
-    <div><Table_mui columns={columns} data={data}
-    groupBy="gender" 
-    pagination
-    header="Employee gender"
-    /></div>
-  )
-}
+    
+      <Box sx={{ display: 'flex', height: '100vh' }}>
+        {isError ? (
+          <TableError title="An error occurred" errorMessage={error.message || 'Failed to fetch data'} onRetry={handleRetry} />
+        ) : (
+          <>
+            <SideTable columns={columnside} data={dataside || []} header="Employee List" isLoading={isLoading} />
+            <MainTable columns={columns} data={data || []} pagination header="Employee Table" isLoading={isLoading} />
+          </>
+        )}
+      </Box>   
+  );
+};
 
-export default App
+export default App;
 
 
-const columns = [
-  { field: 'id', headerName: 'Id' },
-  { field: 'first_name', headerName: 'Firstname' },
-  { field: 'last_name', headerName: 'Lastname' },
-  { field: 'email', headerName: 'Email' },
-  { field: 'gender', headerName: 'Gender' },
-]
 
-// data from mockaroo
+// const columns = [
+//   { field: 'id', headerName: 'Id' },
+//   { field: 'first_name', headerName: 'Firstname' },
+//   { field: 'last_name', headerName: 'Lastname' },
+//   { field: 'email', headerName: 'Email' },
+//   { field: 'gender', headerName: 'Gender' },
+// ]
+
 const data = 
 [{
   "id": 1,
@@ -728,3 +750,538 @@ const data =
   "gender": "Female",
   "ip_address": "95.171.231.126"
 }]
+
+// const columns = Object.keys(data[0]).map(key => ({
+//   field: key,
+//   headerName: key.replace(/_/g, ' ').toUpperCase(),
+// }));
+
+const capitalize = (str) => {
+  return str
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('');
+};
+
+const columns = Object.keys(data[0]).map(key => ({
+  field: key,
+  headerName: capitalize(key),
+}));
+
+
+const columnside = [
+  { field: 'id', headerName: 'Id' },
+  { field: 'first_name', headerName: 'Firstname' },
+  { field: 'last_name', headerName: 'Lastname' },
+
+]
+
+// data from mockaroo
+
+const dataside = 
+
+[{
+  "id": 1,
+  "first_name": "Hirsch",
+  "last_name": "Arnaudet",
+  "email": "harnaudet0@auda.org.au"
+}, {
+  "id": 2,
+  "first_name": "Pooh",
+  "last_name": "Wellbeloved",
+  "email": "pwellbeloved1@unicef.org"
+}, {
+  "id": 3,
+  "first_name": "Caty",
+  "last_name": "Hasney",
+  "email": "chasney2@ehow.com"
+}, {
+  "id": 4,
+  "first_name": "Cissiee",
+  "last_name": "Milthorpe",
+  "email": "cmilthorpe3@vkontakte.ru"
+}, {
+  "id": 5,
+  "first_name": "Kevina",
+  "last_name": "Whitewood",
+  "email": "kwhitewood4@amazon.de"
+}, {
+  "id": 6,
+  "first_name": "Kin",
+  "last_name": "Damiata",
+  "email": "kdamiata5@forbes.com"
+}, {
+  "id": 7,
+  "first_name": "Kaine",
+  "last_name": "Dur",
+  "email": "kdur6@deliciousdays.com"
+}, {
+  "id": 8,
+  "first_name": "Sol",
+  "last_name": "Yurshev",
+  "email": "syurshev7@microsoft.com"
+}, {
+  "id": 9,
+  "first_name": "Adaline",
+  "last_name": "Sears",
+  "email": "asears8@homestead.com"
+}, {
+  "id": 10,
+  "first_name": "Erma",
+  "last_name": "Ringsell",
+  "email": "eringsell9@irs.gov"
+}, {
+  "id": 11,
+  "first_name": "Danie",
+  "last_name": "Matic",
+  "email": "dmatica@parallels.com"
+}, {
+  "id": 12,
+  "first_name": "Kathi",
+  "last_name": "Parsonson",
+  "email": "kparsonsonb@posterous.com"
+}, {
+  "id": 13,
+  "first_name": "Tiff",
+  "last_name": "Willers",
+  "email": "twillersc@geocities.com"
+}, {
+  "id": 14,
+  "first_name": "Rogers",
+  "last_name": "Sutherby",
+  "email": "rsutherbyd@networkadvertising.org"
+}, {
+  "id": 15,
+  "first_name": "Carlynn",
+  "last_name": "Peagram",
+  "email": "cpeagrame@house.gov"
+}, {
+  "id": 16,
+  "first_name": "Roselin",
+  "last_name": "Lawtey",
+  "email": "rlawteyf@mac.com"
+}, {
+  "id": 17,
+  "first_name": "Matilda",
+  "last_name": "Janu",
+  "email": "mjanug@creativecommons.org"
+}, {
+  "id": 18,
+  "first_name": "Michelle",
+  "last_name": "Ormrod",
+  "email": "mormrodh@thetimes.co.uk"
+}, {
+  "id": 19,
+  "first_name": "Rutherford",
+  "last_name": "Creech",
+  "email": "rcreechi@histats.com"
+}, {
+  "id": 20,
+  "first_name": "Sonny",
+  "last_name": "Quinton",
+  "email": "squintonj@biglobe.ne.jp"
+}, {
+  "id": 21,
+  "first_name": "Chlo",
+  "last_name": "Rodda",
+  "email": "croddak@engadget.com"
+}, {
+  "id": 22,
+  "first_name": "Ora",
+  "last_name": "Cosby",
+  "email": "ocosbyl@moonfruit.com"
+}, {
+  "id": 23,
+  "first_name": "Glenine",
+  "last_name": "Kloss",
+  "email": "gklossm@wufoo.com"
+}, {
+  "id": 24,
+  "first_name": "Olivier",
+  "last_name": "Hindsberg",
+  "email": "ohindsbergn@facebook.com"
+}, {
+  "id": 25,
+  "first_name": "Sanders",
+  "last_name": "Arrow",
+  "email": "sarrowo@about.com"
+}, {
+  "id": 26,
+  "first_name": "Jelene",
+  "last_name": "de Wilde",
+  "email": "jdewildep@fastcompany.com"
+}, {
+  "id": 27,
+  "first_name": "Deonne",
+  "last_name": "Shelvey",
+  "email": "dshelveyq@jalbum.net"
+}, {
+  "id": 28,
+  "first_name": "Essy",
+  "last_name": "Rault",
+  "email": "eraultr@reddit.com"
+}, {
+  "id": 29,
+  "first_name": "Mirna",
+  "last_name": "Leuren",
+  "email": "mleurens@va.gov"
+}, {
+  "id": 30,
+  "first_name": "Maye",
+  "last_name": "Shirley",
+  "email": "mshirleyt@bloglovin.com"
+}, {
+  "id": 31,
+  "first_name": "Poppy",
+  "last_name": "Ennever",
+  "email": "penneveru@angelfire.com"
+}, {
+  "id": 32,
+  "first_name": "Juliet",
+  "last_name": "Birchenough",
+  "email": "jbirchenoughv@earthlink.net"
+}, {
+  "id": 33,
+  "first_name": "Chrysler",
+  "last_name": "Klemenz",
+  "email": "cklemenzw@wikimedia.org"
+}, {
+  "id": 34,
+  "first_name": "Ellyn",
+  "last_name": "Poad",
+  "email": "epoadx@google.com.hk"
+}, {
+  "id": 35,
+  "first_name": "Khalil",
+  "last_name": "Cheson",
+  "email": "kchesony@microsoft.com"
+}, {
+  "id": 36,
+  "first_name": "Melisa",
+  "last_name": "Gregolotti",
+  "email": "mgregolottiz@dailymotion.com"
+}, {
+  "id": 37,
+  "first_name": "Tobey",
+  "last_name": "Le Grove",
+  "email": "tlegrove10@wordpress.org"
+}, {
+  "id": 38,
+  "first_name": "Revkah",
+  "last_name": "Fluit",
+  "email": "rfluit11@amazon.co.jp"
+}, {
+  "id": 39,
+  "first_name": "Doralynne",
+  "last_name": "Sidlow",
+  "email": "dsidlow12@yelp.com"
+}, {
+  "id": 40,
+  "first_name": "Quill",
+  "last_name": "Aleevy",
+  "email": "qaleevy13@last.fm"
+}, {
+  "id": 41,
+  "first_name": "Aylmer",
+  "last_name": "Vallender",
+  "email": "avallender14@unesco.org"
+}, {
+  "id": 42,
+  "first_name": "Bettye",
+  "last_name": "Cuncarr",
+  "email": "bcuncarr15@unblog.fr"
+}, {
+  "id": 43,
+  "first_name": "Gerry",
+  "last_name": "Shearstone",
+  "email": "gshearstone16@utexas.edu"
+}, {
+  "id": 44,
+  "first_name": "Melessa",
+  "last_name": "Mulvin",
+  "email": "mmulvin17@microsoft.com"
+}, {
+  "id": 45,
+  "first_name": "Kaylee",
+  "last_name": "Garfath",
+  "email": "kgarfath18@theguardian.com"
+}, {
+  "id": 46,
+  "first_name": "Caritta",
+  "last_name": "Lempertz",
+  "email": "clempertz19@businesswire.com"
+}, {
+  "id": 47,
+  "first_name": "Winslow",
+  "last_name": "Saleway",
+  "email": "wsaleway1a@theatlantic.com"
+}, {
+  "id": 48,
+  "first_name": "Alley",
+  "last_name": "Trounce",
+  "email": "atrounce1b@youtube.com"
+}, {
+  "id": 49,
+  "first_name": "Granville",
+  "last_name": "Janodet",
+  "email": "gjanodet1c@newsvine.com"
+}, {
+  "id": 50,
+  "first_name": "Lamont",
+  "last_name": "Bernardet",
+  "email": "lbernardet1d@pen.io"
+}, {
+  "id": 51,
+  "first_name": "Eugen",
+  "last_name": "Muddicliffe",
+  "email": "emuddicliffe1e@storify.com"
+}, {
+  "id": 52,
+  "first_name": "Ann",
+  "last_name": "Durie",
+  "email": "adurie1f@elpais.com"
+}, {
+  "id": 53,
+  "first_name": "Boony",
+  "last_name": "Burleton",
+  "email": "bburleton1g@dot.gov"
+}, {
+  "id": 54,
+  "first_name": "Perri",
+  "last_name": "Huffy",
+  "email": "phuffy1h@tripod.com"
+}, {
+  "id": 55,
+  "first_name": "Daryn",
+  "last_name": "MacKerley",
+  "email": "dmackerley1i@businessweek.com"
+}, {
+  "id": 56,
+  "first_name": "Vally",
+  "last_name": "Druitt",
+  "email": "vdruitt1j@vistaprint.com"
+}, {
+  "id": 57,
+  "first_name": "Ruttger",
+  "last_name": "Deelay",
+  "email": "rdeelay1k@parallels.com"
+}, {
+  "id": 58,
+  "first_name": "Beryl",
+  "last_name": "Harnetty",
+  "email": "bharnetty1l@shinystat.com"
+}, {
+  "id": 59,
+  "first_name": "Fran",
+  "last_name": "Redish",
+  "email": "fredish1m@google.it"
+}, {
+  "id": 60,
+  "first_name": "Renado",
+  "last_name": "Veall",
+  "email": "rveall1n@gmpg.org"
+}, {
+  "id": 61,
+  "first_name": "Rufe",
+  "last_name": "Lezemere",
+  "email": "rlezemere1o@desdev.cn"
+}, {
+  "id": 62,
+  "first_name": "Josefa",
+  "last_name": "Stolberger",
+  "email": "jstolberger1p@blogs.com"
+}, {
+  "id": 63,
+  "first_name": "Randie",
+  "last_name": "Gullick",
+  "email": "rgullick1q@cargocollective.com"
+}, {
+  "id": 64,
+  "first_name": "Callean",
+  "last_name": "Farrell",
+  "email": "cfarrell1r@google.com"
+}, {
+  "id": 65,
+  "first_name": "Danila",
+  "last_name": "Glenton",
+  "email": "dglenton1s@naver.com"
+}, {
+  "id": 66,
+  "first_name": "Vanni",
+  "last_name": "Parker",
+  "email": "vparker1t@naver.com"
+}, {
+  "id": 67,
+  "first_name": "Gardy",
+  "last_name": "Tschirschky",
+  "email": "gtschirschky1u@ucoz.com"
+}, {
+  "id": 68,
+  "first_name": "Shirlene",
+  "last_name": "MacQuarrie",
+  "email": "smacquarrie1v@yellowpages.com"
+}, {
+  "id": 69,
+  "first_name": "Arly",
+  "last_name": "Avo",
+  "email": "aavo1w@desdev.cn"
+}, {
+  "id": 70,
+  "first_name": "Lydie",
+  "last_name": "Conley",
+  "email": "lconley1x@photobucket.com"
+}, {
+  "id": 71,
+  "first_name": "Lexie",
+  "last_name": "Longstaff",
+  "email": "llongstaff1y@rediff.com"
+}, {
+  "id": 72,
+  "first_name": "Darelle",
+  "last_name": "Tomczykowski",
+  "email": "dtomczykowski1z@google.cn"
+}, {
+  "id": 73,
+  "first_name": "Baxy",
+  "last_name": "Crosi",
+  "email": "bcrosi20@dyndns.org"
+}, {
+  "id": 74,
+  "first_name": "Erminie",
+  "last_name": "Joerning",
+  "email": "ejoerning21@loc.gov"
+}, {
+  "id": 75,
+  "first_name": "Lyndel",
+  "last_name": "Rabbitts",
+  "email": "lrabbitts22@blogspot.com"
+}, {
+  "id": 76,
+  "first_name": "Ryon",
+  "last_name": "Kment",
+  "email": "rkment23@last.fm"
+}, {
+  "id": 77,
+  "first_name": "Nickey",
+  "last_name": "Summerson",
+  "email": "nsummerson24@exblog.jp"
+}, {
+  "id": 78,
+  "first_name": "Reine",
+  "last_name": "Blagdon",
+  "email": "rblagdon25@shareasale.com"
+}, {
+  "id": 79,
+  "first_name": "Gaultiero",
+  "last_name": "Spincks",
+  "email": "gspincks26@moonfruit.com"
+}, {
+  "id": 80,
+  "first_name": "Biddie",
+  "last_name": "Malthus",
+  "email": "bmalthus27@mtv.com"
+}, {
+  "id": 81,
+  "first_name": "Ode",
+  "last_name": "Leyre",
+  "email": "oleyre28@geocities.com"
+}, {
+  "id": 82,
+  "first_name": "Nikolas",
+  "last_name": "Layson",
+  "email": "nlayson29@flickr.com"
+}, {
+  "id": 83,
+  "first_name": "Estelle",
+  "last_name": "Netherclift",
+  "email": "enetherclift2a@ifeng.com"
+}, {
+  "id": 84,
+  "first_name": "Denni",
+  "last_name": "Kevis",
+  "email": "dkevis2b@flavors.me"
+}, {
+  "id": 85,
+  "first_name": "Tomlin",
+  "last_name": "Alejo",
+  "email": "talejo2c@google.com.br"
+}, {
+  "id": 86,
+  "first_name": "Shelby",
+  "last_name": "Shovelton",
+  "email": "sshovelton2d@stumbleupon.com"
+}, {
+  "id": 87,
+  "first_name": "Lenna",
+  "last_name": "Coule",
+  "email": "lcoule2e@bbc.co.uk"
+}, {
+  "id": 88,
+  "first_name": "Cori",
+  "last_name": "Vye",
+  "email": "cvye2f@cargocollective.com"
+}, {
+  "id": 89,
+  "first_name": "Conan",
+  "last_name": "Hans",
+  "email": "chans2g@prnewswire.com"
+}, {
+  "id": 90,
+  "first_name": "Jesse",
+  "last_name": "Battrick",
+  "email": "jbattrick2h@harvard.edu"
+}, {
+  "id": 91,
+  "first_name": "Brigit",
+  "last_name": "Armit",
+  "email": "barmit2i@intel.com"
+}, {
+  "id": 92,
+  "first_name": "Elmer",
+  "last_name": "Quilkin",
+  "email": "equilkin2j@tumblr.com"
+}, {
+  "id": 93,
+  "first_name": "Alvira",
+  "last_name": "Flowitt",
+  "email": "aflowitt2k@csmonitor.com"
+}, {
+  "id": 94,
+  "first_name": "Grete",
+  "last_name": "Gilpillan",
+  "email": "ggilpillan2l@comcast.net"
+}, {
+  "id": 95,
+  "first_name": "Lorin",
+  "last_name": "Firebrace",
+  "email": "lfirebrace2m@google.co.jp"
+}, {
+  "id": 96,
+  "first_name": "Oralie",
+  "last_name": "Sadat",
+  "email": "osadat2n@google.co.jp"
+}, {
+  "id": 97,
+  "first_name": "Gwendolyn",
+  "last_name": "Gell",
+  "email": "ggell2o@nasa.gov"
+}, {
+  "id": 98,
+  "first_name": "Wilton",
+  "last_name": "Peskett",
+  "email": "wpeskett2p@cdc.gov"
+}, {
+  "id": 99,
+  "first_name": "Kanya",
+  "last_name": "Skeath",
+  "email": "kskeath2q@list-manage.com"
+}, {
+  "id": 100,
+  "first_name": "Natal",
+  "last_name": "Vaggs",
+  "email": "nvaggs2r@epa.gov"
+}]
+
+
+
+
