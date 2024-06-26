@@ -2,11 +2,17 @@
 
 
 import React, { useState, useMemo } from 'react';
+// import {
+//   Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow, Paper,
+//   TableSortLabel, Pagination, Stack, Select, MenuItem, FormControl, InputLabel, Skeleton, TextField
+// } from "@mui/material";
+// import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
+
 import {
-  Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow, Paper,
-  TableSortLabel, Pagination, Stack, Select, MenuItem, FormControl, InputLabel, Skeleton
+  Box, Typography, TableContainer, TableBody, TableCell, TableHead, Table, TableRow, Paper,Skeleton,
+  TableSortLabel, Select, MenuItem, Pagination, Stack, FormControl, InputLabel, IconButton, InputAdornment, TextField
 } from "@mui/material";
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
+import { ArrowDropDown, ArrowDropUp, Close as CloseIcon, Search as SearchIcon } from '@mui/icons-material';
 
 const MainTable = ({ columns, data, sortable = true, pagination = true, defaultRowsPerPage = 30, isLoading = false, header=null }) => {
   const [order, setOrder] = useState('asc');
@@ -15,6 +21,7 @@ const MainTable = ({ columns, data, sortable = true, pagination = true, defaultR
   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
   const [groupBy, setGroupBy] = useState(null);
   const [sortBy, setSortBy] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleRequestSort = (property) => {
     if (property === "") {
@@ -46,6 +53,20 @@ const MainTable = ({ columns, data, sortable = true, pagination = true, defaultR
     setSortBy(value);
     handleRequestSort(value);
   };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    setPage(1);
+  };
+
+  const filteredData = useMemo(() => {
+    if (!searchQuery) return data;
+    return data.filter(item =>
+      columns.some(column =>
+        item[column.field].toString().toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [data, searchQuery, columns]);
 
   const getComparator = (order, orderBy) => {
     return order === 'desc'
@@ -98,8 +119,8 @@ const MainTable = ({ columns, data, sortable = true, pagination = true, defaultR
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw' }}>
       <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h6">{header}</Typography>
-        <Box sx={{ display: 'flex' }}>
-          <FormControl variant="standard" size="small" sx={{ minWidth: 120, mr: 2 }}>
+        <Box sx={{ display: 'flex',justifyItems: 'center', alignItems: 'center', }}>
+          <FormControl variant="standard" size="small" sx={{ minWidth: 90, mr: 2 ,}}>
             <InputLabel>Group By</InputLabel>
             <Select value={groupBy} onChange={handleGroupByChange} label="Group By">
               <MenuItem value=""><em>None</em></MenuItem>
@@ -108,21 +129,43 @@ const MainTable = ({ columns, data, sortable = true, pagination = true, defaultR
               ))}
             </Select>
           </FormControl>
-          <FormControl variant="standard" size="small" sx={{ minWidth: 120 }}>
+          <FormControl variant="standard" size="small" sx={{ minWidth: 75 , mr:2}}>
             <InputLabel>Sort By</InputLabel>
-            <Select value={sortBy} onChange={handleSortByChange} label="Sort By">
+            <Select value={sortBy} onChange={handleSortByChange} label="Sort By"> 
               <MenuItem value=""><em>None</em></MenuItem>
               {columns.map((column) => (
                 <MenuItem key={column.field} value={column.field}>{column.headerName}</MenuItem>
               ))}
             </Select>
           </FormControl>
+          <TextField
+            variant="standard"
+            size="small"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search..."
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+              endAdornment: searchQuery ? (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClearSearch} size="small">
+                    <CloseIcon />
+                  </IconButton>
+                </InputAdornment>
+              ) : null,
+            }}
+            sx={{ width: 100,  }}
+          />
         </Box>
       </Box>
-      <TableContainer component={Paper} sx={{ flex: 1, width: '100%', overflow: 'hidden' }}>
-        <Box sx={{ maxHeight: 'calc(100vh - 150px)', overflowY: 'auto' }}>
+      <TableContainer component={Paper} sx={{ flex: 1, width: '100%', overflow: 'auto', }}>
+        {/* <Box sx={{ maxHeight: 'calc(100vh - 150px)', overflowY: 'auto' }}> */}
           <Table stickyHeader>
-            <TableHead>
+            <TableHead sx={{height:'1000'}}>
               <TableRow>
                 {columns.map((column) => (
                   <TableCell
@@ -166,7 +209,7 @@ const MainTable = ({ columns, data, sortable = true, pagination = true, defaultR
               ))}
             </TableBody>
           </Table>
-        </Box>
+        {/* </Box> */}
       </TableContainer>
       {pagination && (
         <Stack spacing={2} sx={{ p: 2 }}>

@@ -82,7 +82,7 @@ const SideTable = ({ columns, data, sortable = true, pagination = true, defaultR
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: 350, height: '100vh', overflowY: 'auto', borderRight: 1, borderColor: 'divider' }}>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center',height:'8rem',maxHeight:'8rem' }}>
         <Typography variant="h6">{header}</Typography>
       </Box>
       <TableContainer component={Paper}>

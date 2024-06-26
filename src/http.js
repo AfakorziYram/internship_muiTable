@@ -2,7 +2,7 @@
 
 export async function FetchData () {
 
-  const response = await fetch('https://my.api.mockaroo.com/users.json');
+  const response = await fetch('https://my.api.mockaroo.com/users.json?key=0286e5e0');
 
   if (!response.ok) {
     const error = new Error('An error occured while fetching the data');
@@ -11,7 +11,7 @@ export async function FetchData () {
     throw error;
   }
 
-  const {data } = await response.json();
+  const data  = await response.json();
 
   return  data;
 }
